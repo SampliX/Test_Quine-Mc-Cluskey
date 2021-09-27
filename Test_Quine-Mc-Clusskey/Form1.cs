@@ -15,6 +15,9 @@ namespace Test_Quine_Mc_Clusskey
         List<TextBox> textBoxes = new List<TextBox>();
         List<LowerMintermStruct> Minterms = new List<LowerMintermStruct>();
         List<LowerMintermStruct> NewMinterms = new List<LowerMintermStruct>();
+
+        string[,] MinimizationTable;
+
         string ResultLine = "";
         int LastX;
         int LastY;
@@ -117,8 +120,11 @@ namespace Test_Quine_Mc_Clusskey
                 printFunc();
 
             DataSearch(SortData());
+            OptimizeMinerms();
 
             CalcTable();
+
+            WriteTable();
 
             ConvertResult();
 
@@ -214,6 +220,89 @@ namespace Test_Quine_Mc_Clusskey
             }
         }
 
+        public List<string> OptimizeMinerms()
+        {
+            List<string> NewMint = new List<string>();
+            List<string> OldMinterms = new List<string>();
+
+            bool HaveCopy = false;
+
+            int LineDifferenceCounter = 0;
+            int DifferenceIndex = 0;
+
+            for (int i = 0; i < NewMinterms.Count; i++)
+            {
+                for (int j = 0; j < NewMinterms[i].LowerMinterm.Count; j++)
+                {
+                    OldMinterms.Add(NewMinterms[i].LowerMinterm[j]);
+                }
+            }
+
+            while (true)
+            {
+                for (int i = 0; i < OldMinterms.Count - 1; i++)
+                {
+                    for (int j = i + 1; j < OldMinterms.Count; j++)
+                    {
+                        LineDifferenceCounter = 0;
+                        DifferenceIndex = 0;
+
+                        for (int k = 0; k < OldMinterms[i].Length; k++)
+                        {
+                            if(OldMinterms[i][k].ToString() != OldMinterms[j][k].ToString() && !(OldMinterms[i][k].ToString() == "x" || OldMinterms[j][k].ToString() == "x"))
+                            {
+                                LineDifferenceCounter++;
+                                DifferenceIndex = k;
+                            }
+                        }
+
+                        HaveCopy = false;
+
+                        if(LineDifferenceCounter == 1)
+                        {
+                            string line = "";
+
+                            for (int z = 0; z < Convert.ToInt32(textBox2.Text); z++)
+                            {
+                                if (z != DifferenceIndex)
+                                {
+                                    line += Convert.ToString(OldMinterms[j][z].ToString());
+                                }
+                                else
+                                {
+                                    line += "x";
+                                }
+                            }
+
+                            if(NewMint.Count != 0)
+                                for (int k = 0; k < NewMint.Count; k++)
+                                {
+                                    if (NewMint[k] == OldMinterms[j])
+                                    {
+                                        HaveCopy = true;
+                                        break;
+                                    }
+                                }
+
+                            if (!HaveCopy)
+                                NewMint.Add(line);
+
+                        }
+                    }
+                }
+
+                if (OldMinterms.Count == NewMinterms.Count)
+                    break;
+                else
+                {
+                    OldMinterms = NewMint;
+                    NewMint = new List<string>();
+                }
+            }
+
+            return NewMint;
+        }
+
         public string ConvertToFormat(string line)
         {
             int LengthOfLine = Convert.ToInt32(textBox2.Text) - line.Length;
@@ -240,7 +329,7 @@ namespace Test_Quine_Mc_Clusskey
                 NewMintermCountSum += NewMinterms[i].LowerMinterm.Count;
             }
 
-            string[,] MinimizationTable = new string[NewMintermCountSum + 1 /*column*/, MintermCountSum + 1 /*row*/];
+            MinimizationTable = new string[NewMintermCountSum + 1 /*column*/, MintermCountSum + 1 /*row*/];
 
             int x = 1;
             int y = 1;
@@ -308,23 +397,67 @@ namespace Test_Quine_Mc_Clusskey
             }
         }
 
+        public void WriteTable()
+        {
+            string TmpLine = string.Empty;
+
+            for (int i = 0; i < MinimizationTable.GetLength(0); i++)
+            {
+                for (int j = 0; j < MinimizationTable.GetLength(1); j++)
+                {
+                    TmpLine = "";
+
+                    if(MinimizationTable[i,j] == null)
+                    {
+                        while (TmpLine.Length != 2*Convert.ToInt32(textBox2.Text))
+                        {
+                            TmpLine += " ";
+                        }
+
+                        textBox4.Text += TmpLine;
+                    }
+                    else if(MinimizationTable[i, j].Length < Convert.ToInt32(textBox2.Text))
+                    {
+                        while (MinimizationTable[i, j].Length + TmpLine.Length != Convert.ToInt32(textBox2.Text))
+                        {
+                            TmpLine += "+";
+                        }
+
+                        textBox4.Text += MinimizationTable[i, j] + TmpLine;
+                    }
+                    else
+                    {
+                        textBox4.Text += MinimizationTable[i, j];
+                    }
+
+                    textBox4.Text += "|";
+                }
+
+                textBox4.Text += "\r\n";
+            }
+        }
+
         public void ConvertResult()
         {
             string line = "";
 
             string[] SplitResult = ResultLine.Split(new char[] { ' ' });
 
-            for (int i = 0; i < SplitResult.Length; i += 2)
+            for (int i = 0; i < SplitResult.Length - 2; i++)
             {
                 for (int j = 0; j < SplitResult[i].Length; j++)
                 {
                     if (SplitResult[i][j].ToString() == "1")
                     {
-                        line += Convert.ToString('a' + j);
+                        line += Convert.ToString(Convert.ToChar('a' + j));
                     }
                     else if(SplitResult[i][j].ToString() == "0")
                     {
-                        line += "~" + Convert.ToString('a' + j);
+                        line += "~" + Convert.ToString(Convert.ToChar('a' + j));
+                    }
+                    else if(SplitResult[i][j].ToString() == "+")
+                    {
+                        line += " + ";
                     }
                 }
             }

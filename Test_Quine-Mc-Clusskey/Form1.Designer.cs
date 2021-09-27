@@ -38,6 +38,7 @@ namespace Test_Quine_Mc_Clusskey
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
+            this.textBox4 = new System.Windows.Forms.TextBox();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -55,7 +56,7 @@ namespace Test_Quine_Mc_Clusskey
             this.panel1.AutoScroll = true;
             this.panel1.Location = new System.Drawing.Point(13, 28);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(600, 438);
+            this.panel1.Size = new System.Drawing.Size(457, 438);
             this.panel1.TabIndex = 5;
             // 
             // menuStrip1
@@ -80,7 +81,7 @@ namespace Test_Quine_Mc_Clusskey
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(167, 20);
             this.textBox1.TabIndex = 7;
-            this.textBox1.Text = "11011010";
+            this.textBox1.Text = "1101110110101010";
             // 
             // button1
             // 
@@ -99,7 +100,7 @@ namespace Test_Quine_Mc_Clusskey
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(87, 20);
             this.textBox2.TabIndex = 9;
-            this.textBox2.Text = "3";
+            this.textBox2.Text = "4";
             // 
             // textBox3
             // 
@@ -117,12 +118,21 @@ namespace Test_Quine_Mc_Clusskey
             this.label2.TabIndex = 11;
             this.label2.Text = "Ответ:";
             // 
+            // textBox4
+            // 
+            this.textBox4.Location = new System.Drawing.Point(516, 214);
+            this.textBox4.Multiline = true;
+            this.textBox4.Name = "textBox4";
+            this.textBox4.Size = new System.Drawing.Size(362, 252);
+            this.textBox4.TabIndex = 12;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.ClientSize = new System.Drawing.Size(890, 478);
+            this.Controls.Add(this.textBox4);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.textBox3);
             this.Controls.Add(this.textBox2);
@@ -151,6 +161,7 @@ namespace Test_Quine_Mc_Clusskey
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.TextBox textBox3;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TextBox textBox4;
     }
 }
 
