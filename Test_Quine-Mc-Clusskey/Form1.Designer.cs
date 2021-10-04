@@ -49,7 +49,7 @@ namespace Test_Quine_Mc_Clusskey
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(1018, 46);
+            this.label1.Location = new System.Drawing.Point(306, 58);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(73, 13);
             this.label1.TabIndex = 3;
@@ -60,7 +60,7 @@ namespace Test_Quine_Mc_Clusskey
             this.panel1.AutoScroll = true;
             this.panel1.Location = new System.Drawing.Point(13, 28);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(457, 438);
+            this.panel1.Size = new System.Drawing.Size(275, 438);
             this.panel1.TabIndex = 5;
             // 
             // menuStrip1
@@ -69,7 +69,7 @@ namespace Test_Quine_Mc_Clusskey
             this.файлToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1302, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1071, 24);
             this.menuStrip1.TabIndex = 6;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -81,7 +81,7 @@ namespace Test_Quine_Mc_Clusskey
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(1018, 71);
+            this.textBox1.Location = new System.Drawing.Point(306, 83);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(167, 20);
             this.textBox1.TabIndex = 7;
@@ -90,7 +90,7 @@ namespace Test_Quine_Mc_Clusskey
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(1202, 71);
+            this.button1.Location = new System.Drawing.Point(490, 83);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 8;
@@ -100,7 +100,7 @@ namespace Test_Quine_Mc_Clusskey
             // 
             // textBox2
             // 
-            this.textBox2.Location = new System.Drawing.Point(1098, 46);
+            this.textBox2.Location = new System.Drawing.Point(386, 58);
             this.textBox2.MaxLength = 1;
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(87, 20);
@@ -109,15 +109,15 @@ namespace Test_Quine_Mc_Clusskey
             // 
             // textBox3
             // 
-            this.textBox3.Location = new System.Drawing.Point(1018, 165);
+            this.textBox3.Location = new System.Drawing.Point(307, 140);
             this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(259, 20);
+            this.textBox3.Size = new System.Drawing.Size(756, 20);
             this.textBox3.TabIndex = 10;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(1018, 146);
+            this.label2.Location = new System.Drawing.Point(304, 124);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(40, 13);
             this.label2.TabIndex = 11;
@@ -139,7 +139,7 @@ namespace Test_Quine_Mc_Clusskey
             this.panel2.AutoScroll = true;
             this.panel2.AutoSize = true;
             this.panel2.Controls.Add(this.textBox4);
-            this.panel2.Location = new System.Drawing.Point(518, 206);
+            this.panel2.Location = new System.Drawing.Point(304, 181);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(759, 283);
             this.panel2.TabIndex = 13;
@@ -148,7 +148,7 @@ namespace Test_Quine_Mc_Clusskey
             // 
             this.HexRadioButton.AutoSize = true;
             this.HexRadioButton.Checked = true;
-            this.HexRadioButton.Location = new System.Drawing.Point(1095, 97);
+            this.HexRadioButton.Location = new System.Drawing.Point(383, 109);
             this.HexRadioButton.Name = "HexRadioButton";
             this.HexRadioButton.Size = new System.Drawing.Size(44, 17);
             this.HexRadioButton.TabIndex = 14;
@@ -160,7 +160,7 @@ namespace Test_Quine_Mc_Clusskey
             // BinRadioButton
             // 
             this.BinRadioButton.AutoSize = true;
-            this.BinRadioButton.Location = new System.Drawing.Point(1145, 97);
+            this.BinRadioButton.Location = new System.Drawing.Point(433, 109);
             this.BinRadioButton.Name = "BinRadioButton";
             this.BinRadioButton.Size = new System.Drawing.Size(40, 17);
             this.BinRadioButton.TabIndex = 15;
@@ -173,7 +173,7 @@ namespace Test_Quine_Mc_Clusskey
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
-            this.ClientSize = new System.Drawing.Size(1302, 618);
+            this.ClientSize = new System.Drawing.Size(1071, 475);
             this.Controls.Add(this.BinRadioButton);
             this.Controls.Add(this.HexRadioButton);
             this.Controls.Add(this.panel2);
