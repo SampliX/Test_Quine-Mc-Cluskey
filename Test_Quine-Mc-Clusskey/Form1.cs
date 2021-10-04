@@ -15,10 +15,13 @@ namespace Test_Quine_Mc_Clusskey
         List<TextBox> textBoxes = new List<TextBox>();
         List<LowerMintermStruct> Minterms = new List<LowerMintermStruct>();
         List<LowerMintermStruct> NewMinterms = new List<LowerMintermStruct>();
+        List<string> EndMinterms = new List<string>();
+        List<string> IndexNotEndMinterms = new List<string>();
 
         string[,] MinimizationTable;
 
         string ResultLine = "";
+        string Func;
         int LastX;
         int LastY;
 
@@ -34,6 +37,73 @@ namespace Test_Quine_Mc_Clusskey
             bool tmp;
             int b;
             int counter;
+
+            if(HexRadioButton.Checked)
+            {
+                string TmpLine = "";
+                string HexFunc = textBox1.Text;
+
+                for(int i = 0; i < HexFunc.Length; i++)
+                {
+                    switch(Convert.ToString(HexFunc[i]))
+                    {
+                        case ("0"):
+                            TmpLine += "0000";
+                            break;
+                        case ("1"):
+                            TmpLine += "0001";
+                            break;
+                        case ("2"):
+                            TmpLine += "0010";
+                            break;
+                        case ("3"):
+                            TmpLine += "0011";
+                            break;
+                        case ("4"):
+                            TmpLine += "0100";
+                            break;
+                        case ("5"):
+                            TmpLine += "0101";
+                            break;
+                        case ("6"):
+                            TmpLine += "0110";
+                            break;
+                        case ("7"):
+                            TmpLine += "0111";
+                            break;
+                        case ("8"):
+                            TmpLine += "1000";
+                            break;
+                        case ("9"):
+                            TmpLine += "1001";
+                            break;
+                        case ("a"):
+                            TmpLine += "1010";
+                            break;
+                        case ("b"):
+                            TmpLine += "1011";
+                            break;
+                        case ("c"):
+                            TmpLine += "1100";
+                            break;
+                        case ("d"):
+                            TmpLine += "1101";
+                            break;
+                        case ("e"):
+                            TmpLine += "1110";
+                            break;
+                        case ("f"):
+                            TmpLine += "1111";
+                            break;
+                    }
+                }
+
+                Func = TmpLine;
+            }
+            else if(BinRadioButton.Checked)
+            {
+                Func = textBox1.Text;
+            }
 
             for (byte i = 0; i < BitDepth; i++)
             {
@@ -92,7 +162,7 @@ namespace Test_Quine_Mc_Clusskey
 
             for (int i = 0; i < Math.Pow(2, Convert.ToByte(textBox2.Text)); i++)
             {
-                textBoxes.Add(new TextBox { Name = "F_" + i.ToString(), Text = textBox1.Text[i].ToString(), ReadOnly = true, Size = new Size(20, 20), Location = new Point(LastX, 3 + 25 * (i + 1)), Parent = panel1 });
+                textBoxes.Add(new TextBox { Name = "F_" + i.ToString(), Text = Func[i].ToString(), ReadOnly = true, Size = new Size(20, 20), Location = new Point(LastX, 3 + 25 * (i + 1)), Parent = panel1 });
             }
         }
 
@@ -118,12 +188,21 @@ namespace Test_Quine_Mc_Clusskey
             textBox1.ReadOnly = true;
             textBox2.ReadOnly = true;
 
-            if (textBox1.TextLength == Math.Pow(2, Convert.ToByte(textBox2.Text)))
+            if (Func.Length == Math.Pow(2, Convert.ToByte(textBox2.Text)))
                 PrintFunc();
 
             NewMinterms = DataSearch(SortData());
 
             NewMinterms = OptimizeMinerms(NewMinterms);
+
+            for (int i = 0; i < IndexNotEndMinterms.Count; i++)
+            {
+                for (int j = 0; j < EndMinterms.Count; j++)
+                {
+                    if (EndMinterms[j] == IndexNotEndMinterms[i])
+                        EndMinterms.RemoveAt(j);
+                }
+            }
 
             CalcTable();
 
@@ -148,12 +227,12 @@ namespace Test_Quine_Mc_Clusskey
                 Minterms.Add(new LowerMintermStruct() { LowerMinterm = new List<string>() });
             }
 
-            for (int i = 0; i < textBox1.TextLength; i++)
+            for (int i = 0; i < Func.Length; i++)
             {
                 a = 0;
-                if (Convert.ToInt32(textBox1.Text[i].ToString()) == 1)
+                if (Convert.ToInt32(Func[i].ToString()) == 1)
                 {
-                    line = ConvertToFormat(Convert.ToString(i, 2));
+                    line = ConvertToFormat(Convert.ToString(i, 2), Convert.ToByte(textBox2.Text));
 
                     for(int k = 0; k < line.Length; k++)
                     {
@@ -172,6 +251,7 @@ namespace Test_Quine_Mc_Clusskey
             int LineDifferenceCounter;
             int DifferenceIndex;
             int OneCounter;
+            bool HaveCrossing;
 
             List<LowerMintermStruct> NewMinterms = new List<LowerMintermStruct>();
             List<LowerMintermStruct> NullMintermList = new List<LowerMintermStruct>();
@@ -186,7 +266,9 @@ namespace Test_Quine_Mc_Clusskey
             {
                 for(int j = 0; j < Minterms[i].LowerMinterm.Count; j++)
                 {
-                    for(int k = 0; k < Minterms[i+1].LowerMinterm.Count; k++)
+                    HaveCrossing = false;
+
+                    for (int k = 0; k < Minterms[i+1].LowerMinterm.Count; k++)
                     {
                         LineDifferenceCounter = 0;
                         DifferenceIndex = 0;
@@ -202,12 +284,14 @@ namespace Test_Quine_Mc_Clusskey
 
                             if((Convert.ToString(Minterms[i].LowerMinterm[j][x]) != Convert.ToString(Minterms[i + 1].LowerMinterm[k][x])) && (Convert.ToString(Minterms[i].LowerMinterm[j][x]) == "x" || Convert.ToString(Minterms[i + 1].LowerMinterm[k][x]) == "x"))
                             {
-                                LineDifferenceCounter++;
+                                LineDifferenceCounter = 2;
+                                break;
                             }
                         }
 
                         if(LineDifferenceCounter == 1)
                         {
+                            HaveCrossing = true;
                             string line = "";
 
                             for(int z = 0; z < Convert.ToInt32(textBox2.Text); z++)
@@ -229,7 +313,14 @@ namespace Test_Quine_Mc_Clusskey
                             }
 
                             NewMinterms[OneCounter].LowerMinterm.Add(line);
+
+                            IndexNotEndMinterms.Add(Minterms[i + 1].LowerMinterm[k]);
                         }
+                    }
+
+                    if (!HaveCrossing)
+                    {
+                        EndMinterms.Add(Minterms[i].LowerMinterm[j]);
                     }
                 }
             }
@@ -271,7 +362,6 @@ namespace Test_Quine_Mc_Clusskey
                         if (list[i].LowerMinterm[j] == list[i].LowerMinterm[k])
                             list[i].LowerMinterm.RemoveAt(k);
                     }
-
                 }
             }
 
@@ -297,9 +387,9 @@ namespace Test_Quine_Mc_Clusskey
             return ListAreSame;
         }
 
-        public string ConvertToFormat(string line)
+        public string ConvertToFormat(string line, byte BitDepth)
         {
-            int LengthOfLine = Convert.ToInt32(textBox2.Text) - line.Length;
+            int LengthOfLine = BitDepth - line.Length;
 
             for(int i = 0; i < LengthOfLine; i++)
                 line = "0" + line;
@@ -318,23 +408,32 @@ namespace Test_Quine_Mc_Clusskey
                 MintermCountSum += Minterms[i].LowerMinterm.Count;
             }
 
-            for(int i = 0; i < NewMinterms.Count; i++)
+            /*for(int i = 0; i < NewMinterms.Count; i++)
             {
                 NewMintermCountSum += NewMinterms[i].LowerMinterm.Count;
-            }
+            }*/
+
+            NewMintermCountSum = EndMinterms.Count;
 
             MinimizationTable = new string[NewMintermCountSum + 1 /*column*/, MintermCountSum + 1 /*row*/];
 
             int x = 1;
             int y = 1;
 
-            for(int i = 0; i < NewMinterms.Count; i++)
+            /*for(int i = 0; i < NewMinterms.Count; i++)
             {
                 for(int j = 0; j < NewMinterms[i].LowerMinterm.Count; j++)
                 {
                     MinimizationTable[x, 0] = NewMinterms[i].LowerMinterm[j];
                     x++;
                 }
+            }
+            */
+
+            for(int i = 0; i < EndMinterms.Count; i++)
+            {
+                MinimizationTable[x, 0] = EndMinterms[i];
+                x++;
             }
 
             for (int i = 0; i < Minterms.Count; i++)
@@ -355,7 +454,7 @@ namespace Test_Quine_Mc_Clusskey
                     Difference = 0;
                     for(int k = 0; k < Convert.ToInt32(textBox2.Text); k++)
                     {
-                        if(MinimizationTable[i, 0][k].ToString() != "x")
+                        if(Convert.ToString(MinimizationTable[i, 0][k]) != "x")
                         {
                             if (MinimizationTable[i, 0][k].ToString() != MinimizationTable[0, j][k].ToString())
                             {
@@ -426,12 +525,15 @@ namespace Test_Quine_Mc_Clusskey
 
             List<string> LineCrossingSecond = new List<string>();
             bool HaveResult = false;
+            List<ResultMinimizationTableStruct> resultMinimizations = new List<ResultMinimizationTableStruct>();
 
             for (int i = 1; i < MinimizationTable.GetLength(0); i++)//Stroka
             {
                 if(!CoreList.Contains(i))
                 {
+                    resultMinimizations.Add(new ResultMinimizationTableStruct { ColumnCrossing = new List<string>() });
                     LineCrossingSecond = LineCrossing;
+
                     for (int j = 1; j < MinimizationTable.GetLength(1); j++)//Stolbec
                     {
                         if (MinimizationTable[i, j] == "+")
@@ -449,7 +551,6 @@ namespace Test_Quine_Mc_Clusskey
 
             if(!HaveResult)
             {
-
             }
         }
 
@@ -472,9 +573,11 @@ namespace Test_Quine_Mc_Clusskey
         public void WriteTable()
         {
             string TmpLine;
+            string RowTable = "";
 
             for (int i = 0; i < MinimizationTable.GetLength(0); i++)
             {
+                RowTable = "";
                 for (int j = 0; j < MinimizationTable.GetLength(1); j++)
                 {
                     TmpLine = "";
@@ -486,7 +589,7 @@ namespace Test_Quine_Mc_Clusskey
                             TmpLine += " ";
                         }
 
-                        textBox4.Text += TmpLine;
+                        RowTable += TmpLine;
                     }
                     else if(MinimizationTable[i, j].Length < Convert.ToInt32(textBox2.Text))
                     {
@@ -495,17 +598,21 @@ namespace Test_Quine_Mc_Clusskey
                             TmpLine += "+";
                         }
 
-                        textBox4.Text += MinimizationTable[i, j] + TmpLine;
+                        RowTable += MinimizationTable[i, j] + TmpLine;
                     }
                     else
                     {
-                        textBox4.Text += MinimizationTable[i, j];
+                        RowTable += MinimizationTable[i, j];
                     }
 
-                    textBox4.Text += "|";
+                    RowTable += "|";
                 }
 
-                textBox4.Text += "\r\n";
+                if(i == 0)
+                {
+                    textBox4.Size = new Size(RowTable.Length * 6, MinimizationTable.GetLength(0) * 16);
+                }
+                textBox4.Text += RowTable + "\r\n";
             }
         }
 
@@ -545,6 +652,27 @@ namespace Test_Quine_Mc_Clusskey
         public struct ResultMinimizationTableStruct
         {
             public List<string> ColumnCrossing;
+        }
+
+        private void HexRadioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            if (HexRadioButton.Checked)
+                BinRadioButton.Checked = false;
+
+            textBox1.Text = "";
+        }
+
+        private void BinRadioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            if (BinRadioButton.Checked)
+                HexRadioButton.Checked = false;
+
+            textBox1.Text = "";
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
