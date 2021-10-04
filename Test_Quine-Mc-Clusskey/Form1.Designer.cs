@@ -65,7 +65,7 @@ namespace Test_Quine_Mc_Clusskey
             this.файлToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(890, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1302, 24);
             this.menuStrip1.TabIndex = 6;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -81,7 +81,7 @@ namespace Test_Quine_Mc_Clusskey
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(167, 20);
             this.textBox1.TabIndex = 7;
-            this.textBox1.Text = "1101110110101010";
+            this.textBox1.Text = "0011000011100101";
             // 
             // button1
             // 
@@ -123,7 +123,7 @@ namespace Test_Quine_Mc_Clusskey
             this.textBox4.Location = new System.Drawing.Point(516, 214);
             this.textBox4.Multiline = true;
             this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(362, 252);
+            this.textBox4.Size = new System.Drawing.Size(774, 392);
             this.textBox4.TabIndex = 12;
             // 
             // Form1
@@ -131,7 +131,7 @@ namespace Test_Quine_Mc_Clusskey
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
-            this.ClientSize = new System.Drawing.Size(890, 478);
+            this.ClientSize = new System.Drawing.Size(1302, 618);
             this.Controls.Add(this.textBox4);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.textBox3);

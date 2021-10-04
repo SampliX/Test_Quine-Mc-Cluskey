@@ -82,7 +82,7 @@ namespace Test_Quine_Mc_Clusskey
             }
         }
 
-        public void printFunc()
+        public void PrintFunc()
         {
             Panel BlackLine = new Panel { Location = new Point(LastX + 25, 3), Size = new Size(5, LastY + 18), BackColor = Color.FromArgb(125, 125, 125), Parent = panel1 };
 
@@ -111,16 +111,19 @@ namespace Test_Quine_Mc_Clusskey
         {
             ClearPanel();
 
+            textBox4.Clear();
+
             LoadData(Convert.ToByte(textBox2.Text));
 
             textBox1.ReadOnly = true;
             textBox2.ReadOnly = true;
 
             if (textBox1.TextLength == Math.Pow(2, Convert.ToByte(textBox2.Text)))
-                printFunc();
+                PrintFunc();
 
-            DataSearch(SortData());
-            OptimizeMinerms();
+            NewMinterms = DataSearch(SortData());
+
+            NewMinterms = OptimizeMinerms(NewMinterms);
 
             CalcTable();
 
@@ -138,9 +141,9 @@ namespace Test_Quine_Mc_Clusskey
         {
             Minterms = new List<LowerMintermStruct>();
             string line;
-            int a = 0;
+            int a;
 
-            for (int j = 0; j < Convert.ToInt32(textBox2.Text); j++)
+            for (int j = 0; j < Convert.ToInt32(textBox2.Text) + 1; j++)
             {
                 Minterms.Add(new LowerMintermStruct() { LowerMinterm = new List<string>() });
             }
@@ -157,26 +160,26 @@ namespace Test_Quine_Mc_Clusskey
                         a += Convert.ToInt32(line[k].ToString());
                     }
 
-                    if (a > 0)
-                    {
-                        Minterms[a-1].LowerMinterm.Add(line);
-                    }
+                    Minterms[a].LowerMinterm.Add(line);
                 }
             }
 
             return Minterms;
         }
 
-        public void DataSearch(List<LowerMintermStruct> Minterms)
+        public List<LowerMintermStruct> DataSearch(List<LowerMintermStruct> Minterms)
         {
-            int LineDifferenceCounter = 0;
-            int DifferenceIndex = 0;
+            int LineDifferenceCounter;
+            int DifferenceIndex;
+            int OneCounter;
 
-            NewMinterms = new List<LowerMintermStruct>();
+            List<LowerMintermStruct> NewMinterms = new List<LowerMintermStruct>();
+            List<LowerMintermStruct> NullMintermList = new List<LowerMintermStruct>();
 
-            for (int j = 0; j < Convert.ToInt32(textBox2.Text); j++)
+            for (int j = 0; j < Minterms.Count; j++)
             {
                 NewMinterms.Add(new LowerMintermStruct() { LowerMinterm = new List<string>() });
+                NullMintermList.Add(new LowerMintermStruct() { LowerMinterm = new List<string>() });
             }
 
             for(int i = 0; i < Minterms.Count - 1; i++)
@@ -187,6 +190,7 @@ namespace Test_Quine_Mc_Clusskey
                     {
                         LineDifferenceCounter = 0;
                         DifferenceIndex = 0;
+                        OneCounter = 0;
 
                         for (int x = 0; x < Convert.ToInt32(textBox2.Text); x++)
                         {
@@ -194,6 +198,11 @@ namespace Test_Quine_Mc_Clusskey
                             {
                                 LineDifferenceCounter++;
                                 DifferenceIndex = x;
+                            }
+
+                            if((Convert.ToString(Minterms[i].LowerMinterm[j][x]) != Convert.ToString(Minterms[i + 1].LowerMinterm[k][x])) && (Convert.ToString(Minterms[i].LowerMinterm[j][x]) == "x" || Convert.ToString(Minterms[i + 1].LowerMinterm[k][x]) == "x"))
+                            {
+                                LineDifferenceCounter++;
                             }
                         }
 
@@ -213,94 +222,79 @@ namespace Test_Quine_Mc_Clusskey
                                 }
                             }
 
-                            NewMinterms[Convert.ToInt32(textBox2.Text) - 1 - DifferenceIndex].LowerMinterm.Add(line);
+                            for(int x = 0; x < line.Length; x++)
+                            {
+                                if (Convert.ToString(line[x]) == "1")
+                                    OneCounter++;
+                            }
+
+                            NewMinterms[OneCounter].LowerMinterm.Add(line);
                         }
                     }
                 }
             }
+
+            if (CheckList(NewMinterms, NullMintermList))
+                NewMinterms = Minterms;
+
+            return NewMinterms;
         }
 
-        public List<string> OptimizeMinerms()
+        public List<LowerMintermStruct> OptimizeMinerms(List<LowerMintermStruct> NewMinterms)
         {
-            List<string> NewMint = new List<string>();
-            List<string> OldMinterms = new List<string>();
-
-            bool HaveCopy = false;
-
-            int LineDifferenceCounter = 0;
-            int DifferenceIndex = 0;
-
-            for (int i = 0; i < NewMinterms.Count; i++)
-            {
-                for (int j = 0; j < NewMinterms[i].LowerMinterm.Count; j++)
-                {
-                    OldMinterms.Add(NewMinterms[i].LowerMinterm[j]);
-                }
-            }
+            List<LowerMintermStruct> NewMint;
+            List<LowerMintermStruct> OldMint = NewMinterms;
 
             while (true)
             {
-                for (int i = 0; i < OldMinterms.Count - 1; i++)
-                {
-                    for (int j = i + 1; j < OldMinterms.Count; j++)
-                    {
-                        LineDifferenceCounter = 0;
-                        DifferenceIndex = 0;
+                NewMint = DataSearch(OldMint);
 
-                        for (int k = 0; k < OldMinterms[i].Length; k++)
-                        {
-                            if(OldMinterms[i][k].ToString() != OldMinterms[j][k].ToString() && !(OldMinterms[i][k].ToString() == "x" || OldMinterms[j][k].ToString() == "x"))
-                            {
-                                LineDifferenceCounter++;
-                                DifferenceIndex = k;
-                            }
-                        }
+                NewMint = DeleteCopy(NewMint);
 
-                        HaveCopy = false;
-
-                        if(LineDifferenceCounter == 1)
-                        {
-                            string line = "";
-
-                            for (int z = 0; z < Convert.ToInt32(textBox2.Text); z++)
-                            {
-                                if (z != DifferenceIndex)
-                                {
-                                    line += Convert.ToString(OldMinterms[j][z].ToString());
-                                }
-                                else
-                                {
-                                    line += "x";
-                                }
-                            }
-
-                            if(NewMint.Count != 0)
-                                for (int k = 0; k < NewMint.Count; k++)
-                                {
-                                    if (NewMint[k] == OldMinterms[j])
-                                    {
-                                        HaveCopy = true;
-                                        break;
-                                    }
-                                }
-
-                            if (!HaveCopy)
-                                NewMint.Add(line);
-
-                        }
-                    }
-                }
-
-                if (OldMinterms.Count == NewMinterms.Count)
+                if (CheckList(OldMint, NewMint))
                     break;
                 else
-                {
-                    OldMinterms = NewMint;
-                    NewMint = new List<string>();
-                }
+                    OldMint = NewMint;
             }
 
             return NewMint;
+        }
+
+        public List<LowerMintermStruct> DeleteCopy(List<LowerMintermStruct> list)
+        {
+            for (int i = 0; i < list.Count; i++)
+            {
+                for (int j = 0; j < list[i].LowerMinterm.Count - 1; j++)
+                {
+                    for (int k = j + 1; k < list[i].LowerMinterm.Count; k++)
+                    {
+                        if (list[i].LowerMinterm[j] == list[i].LowerMinterm[k])
+                            list[i].LowerMinterm.RemoveAt(k);
+                    }
+
+                }
+            }
+
+            return list;
+        }
+
+        public bool CheckList(List<LowerMintermStruct> list1, List<LowerMintermStruct> list2)
+        {
+            bool ListAreSame = true;
+
+            if (list1.Count == list2.Count)
+            {
+                for (int i = 0; i < list1.Count; i++)
+                {
+                    if (list1[i].LowerMinterm.Count != list2[i].LowerMinterm.Count)
+                    {
+                        ListAreSame = false;
+                        break;
+                    }
+                }
+            }
+
+            return ListAreSame;
         }
 
         public string ConvertToFormat(string line)
@@ -352,7 +346,7 @@ namespace Test_Quine_Mc_Clusskey
                 }
             }
 
-            int Difference = 0;
+            int Difference;
 
             for (int i = 1; i < MinimizationTable.GetLength(0); i++)
             {
@@ -378,28 +372,106 @@ namespace Test_Quine_Mc_Clusskey
                 }
             }
 
-            int PlusCount = 0;
+            List<int> CoreList = new List<int>();
 
-            for (int i = 1; i < MinimizationTable.GetLength(1); i++)//x
+            int PlusCount;
+            string TmpLine = "";
+            int Index;
+
+            for (int j = 1; j < MinimizationTable.GetLength(1); j++)//Stolbec
             {
                 PlusCount = 0;
-
-                for (int j = 1; j < MinimizationTable.GetLength(0); j++)//y
+                Index = 0;
+                for (int i = 1; i < MinimizationTable.GetLength(0); i++)//Stroka
                 {
-                    if (MinimizationTable[j, i] == "+")
+                    if (MinimizationTable[i, j] == "+")
+                    {
                         PlusCount++;
+                        TmpLine = MinimizationTable[i, 0];
+                        Index = i;
+                    }
                 }
 
-                if(PlusCount == 1)
+                if (PlusCount == 1 && !ResultLine.Contains(TmpLine))
                 {
-                    ResultLine += MinimizationTable[0, i] + " + ";
+                    ResultLine += TmpLine + " + ";
+                    TmpLine = "";
+                    CoreList.Add(Index);
                 }
             }
+
+            CoreList.Sort();
+
+            List<string> LineCrossing = new List<string>();
+            LineCrossing.Add("+");
+
+            for(int i = 0; i < CoreList.Count; i++)
+            {
+                for (int j = 1; j < MinimizationTable.GetLength(1); j++)
+                {
+                    if (i == 0)
+                    {
+                        if (MinimizationTable[CoreList[i], j] == "+")
+                            LineCrossing.Add("+");
+                        else
+                            LineCrossing.Add("*");
+                    }
+                    else
+                    {
+                        if (MinimizationTable[CoreList[i], j] == "+")
+                            LineCrossing[j] = "+";
+                    }
+                }
+            }
+
+            List<string> LineCrossingSecond = new List<string>();
+            bool HaveResult = false;
+
+            for (int i = 1; i < MinimizationTable.GetLength(0); i++)//Stroka
+            {
+                if(!CoreList.Contains(i))
+                {
+                    LineCrossingSecond = LineCrossing;
+                    for (int j = 1; j < MinimizationTable.GetLength(1); j++)//Stolbec
+                    {
+                        if (MinimizationTable[i, j] == "+")
+                            LineCrossingSecond[j] = "+";
+                    }
+
+                    if(CheckLine(LineCrossingSecond))
+                    {
+                        ResultLine += MinimizationTable[i, 0] + " + ";
+                        HaveResult = true;
+                        break;
+                    }
+                }
+            }
+
+            if(!HaveResult)
+            {
+
+            }
+        }
+
+        public bool CheckLine(List<string> list)
+        {
+            bool HaveAllPlus = true;
+
+            for(int i = 1; i < list.Count; i++)
+            {
+                if (list[i] != "+")
+                {
+                    HaveAllPlus = false;
+                    break;
+                }
+            }
+
+            return HaveAllPlus;
         }
 
         public void WriteTable()
         {
-            string TmpLine = string.Empty;
+            string TmpLine;
 
             for (int i = 0; i < MinimizationTable.GetLength(0); i++)
             {
@@ -470,5 +542,9 @@ namespace Test_Quine_Mc_Clusskey
             public List<string> LowerMinterm;
         }
 
+        public struct ResultMinimizationTableStruct
+        {
+            public List<string> ColumnCrossing;
+        }
     }
 }
