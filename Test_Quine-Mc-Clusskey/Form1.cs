@@ -510,6 +510,8 @@ namespace Test_Quine_Mc_Clusskey
 
             CoreList = FindOptimalResult(LineCrossing, CoreList);
 
+            CheckAnswer(CoreList);
+
             for(int i = 0 + CoreCount; i < CoreList.Count; i++)
             {
                 ResultLine += MinimizationTable[CoreList[i], 0] + " + ";
@@ -613,6 +615,39 @@ namespace Test_Quine_Mc_Clusskey
             }
 
             return HaveAllPlus;
+        }
+
+        public void CheckAnswer(List<int> CoreList)
+        {
+            string line;
+            int DifferenceCount;
+
+            for (int i = 0; i < Func.Length; i++)
+            {
+                DifferenceCount = 0;
+                if (Convert.ToInt32(Func[i].ToString()) == 1)
+                {
+                    line = ConvertToFormat(Convert.ToString(i, 2), Convert.ToByte(textBox2.Text));
+
+                    for(int j = 0; j < CoreList.Count; j++)
+                    {
+                        for (int k = 0; k < line.Length; k++)
+                        {
+                            if(!(Convert.ToString(MinimizationTable[CoreList[j], 0][k]) == Convert.ToString(line[k]) || Convert.ToString(MinimizationTable[CoreList[j], 0][k]) == "x"))
+                            {
+                                DifferenceCount++;
+                                break;
+                            }
+                        }
+                    }
+
+                    if(DifferenceCount == CoreList.Count)
+                    {
+                        MessageBox.Show("Ответ не сходится");
+                        break;
+                    }
+                }
+            }
         }
 
         public void WriteTable()

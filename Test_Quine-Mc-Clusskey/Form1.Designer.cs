@@ -193,7 +193,6 @@ namespace Test_Quine_Mc_Clusskey
             this.textBox6.Name = "textBox6";
             this.textBox6.Size = new System.Drawing.Size(308, 20);
             this.textBox6.TabIndex = 18;
-            this.textBox6.Text = " ac~d~e + ~b~c~d";
             this.textBox6.TextChanged += new System.EventHandler(this.textBox6_TextChanged);
             // 
             // Form1
