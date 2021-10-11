@@ -42,6 +42,9 @@ namespace Test_Quine_Mc_Clusskey
             this.panel2 = new System.Windows.Forms.Panel();
             this.HexRadioButton = new System.Windows.Forms.RadioButton();
             this.BinRadioButton = new System.Windows.Forms.RadioButton();
+            this.textBox5 = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.textBox6 = new System.Windows.Forms.TextBox();
             this.menuStrip1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
@@ -60,7 +63,7 @@ namespace Test_Quine_Mc_Clusskey
             this.panel1.AutoScroll = true;
             this.panel1.Location = new System.Drawing.Point(13, 28);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(275, 438);
+            this.panel1.Size = new System.Drawing.Size(275, 501);
             this.panel1.TabIndex = 5;
             // 
             // menuStrip1
@@ -109,7 +112,7 @@ namespace Test_Quine_Mc_Clusskey
             // 
             // textBox3
             // 
-            this.textBox3.Location = new System.Drawing.Point(307, 140);
+            this.textBox3.Location = new System.Drawing.Point(307, 196);
             this.textBox3.Name = "textBox3";
             this.textBox3.Size = new System.Drawing.Size(756, 20);
             this.textBox3.TabIndex = 10;
@@ -117,7 +120,7 @@ namespace Test_Quine_Mc_Clusskey
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(304, 124);
+            this.label2.Location = new System.Drawing.Point(303, 180);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(40, 13);
             this.label2.TabIndex = 11;
@@ -139,7 +142,7 @@ namespace Test_Quine_Mc_Clusskey
             this.panel2.AutoScroll = true;
             this.panel2.AutoSize = true;
             this.panel2.Controls.Add(this.textBox4);
-            this.panel2.Location = new System.Drawing.Point(304, 181);
+            this.panel2.Location = new System.Drawing.Point(306, 249);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(759, 283);
             this.panel2.TabIndex = 13;
@@ -168,12 +171,40 @@ namespace Test_Quine_Mc_Clusskey
             this.BinRadioButton.UseVisualStyleBackColor = true;
             this.BinRadioButton.CheckedChanged += new System.EventHandler(this.BinRadioButton_CheckedChanged);
             // 
+            // textBox5
+            // 
+            this.textBox5.Location = new System.Drawing.Point(306, 148);
+            this.textBox5.Name = "textBox5";
+            this.textBox5.Size = new System.Drawing.Size(757, 20);
+            this.textBox5.TabIndex = 16;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(306, 132);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(36, 13);
+            this.label3.TabIndex = 17;
+            this.label3.Text = "Ядро:";
+            // 
+            // textBox6
+            // 
+            this.textBox6.Location = new System.Drawing.Point(755, 109);
+            this.textBox6.Name = "textBox6";
+            this.textBox6.Size = new System.Drawing.Size(308, 20);
+            this.textBox6.TabIndex = 18;
+            this.textBox6.Text = " ac~d~e + ~b~c~d";
+            this.textBox6.TextChanged += new System.EventHandler(this.textBox6_TextChanged);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
-            this.ClientSize = new System.Drawing.Size(1071, 475);
+            this.ClientSize = new System.Drawing.Size(1071, 544);
+            this.Controls.Add(this.textBox6);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.textBox5);
             this.Controls.Add(this.BinRadioButton);
             this.Controls.Add(this.HexRadioButton);
             this.Controls.Add(this.panel2);
@@ -211,6 +242,9 @@ namespace Test_Quine_Mc_Clusskey
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.RadioButton HexRadioButton;
         private System.Windows.Forms.RadioButton BinRadioButton;
+        private System.Windows.Forms.TextBox textBox5;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox textBox6;
     }
 }
 

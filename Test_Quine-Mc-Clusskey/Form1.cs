@@ -16,6 +16,7 @@ namespace Test_Quine_Mc_Clusskey
         string[,] MinimizationTable;
 
         string ResultLine = "";
+        string CoreResultLine = "";
         string Func;
         int LastX;
         int LastY;
@@ -180,6 +181,7 @@ namespace Test_Quine_Mc_Clusskey
             EndMinterms.Clear();
             IndexNotEndMinterms.Clear();
             ResultLine = "";
+            CoreResultLine = "";
 
             LoadData(Convert.ToByte(textBox2.Text));
 
@@ -206,8 +208,10 @@ namespace Test_Quine_Mc_Clusskey
 
             WriteTable();
 
-            ConvertResult();
+            CoreResultLine = ConvertResult(CoreResultLine);
+            ResultLine = ConvertResult(ResultLine);
 
+            textBox5.Text = CoreResultLine;
             textBox3.Text = ResultLine;
 
             textBox1.ReadOnly = false;
@@ -454,7 +458,6 @@ namespace Test_Quine_Mc_Clusskey
 
             int PlusCount = 0;
             string TmpLine = "";
-            string LowResultLine = "";
             int CoreCount = 0;
             int Index = 0;
 
@@ -474,7 +477,7 @@ namespace Test_Quine_Mc_Clusskey
 
                 if (PlusCount == 1 && !ResultLine.Contains(TmpLine))
                 {
-                    LowResultLine += TmpLine + " + ";
+                    CoreResultLine += TmpLine + " + ";
                     CoreCount++;
                     TmpLine = "";
                     CoreList.Add(Index);
@@ -507,8 +510,6 @@ namespace Test_Quine_Mc_Clusskey
 
             CoreList = FindOptimalResult(LineCrossing, CoreList);
 
-            ResultLine = LowResultLine;
-
             for(int i = 0 + CoreCount; i < CoreList.Count; i++)
             {
                 ResultLine += MinimizationTable[CoreList[i], 0] + " + ";
@@ -524,11 +525,26 @@ namespace Test_Quine_Mc_Clusskey
             int max;
             int index = 0;
 
+            ResultMinimizations.Add(new ResultMinimizationTableStruct { ColumnCrossing = new List<string>() });
+
+            for (int i = 1; i < MinimizationTable.GetLength(0); i++)
+            {
+                ResultMinimizations.Add(new ResultMinimizationTableStruct { ColumnCrossing = new List<string>() });
+                ResultMinimizations[i].ColumnCrossing.Add("+");
+
+                for (int j = 1; j < MinimizationTable.GetLength(1); j++)//Stolbec
+                {
+                    if (MinimizationTable[i, j] == "+")
+                        ResultMinimizations[i].ColumnCrossing.Add("+");
+                    else
+                        ResultMinimizations[i].ColumnCrossing.Add("*");
+                }
+            }
+
             while (true)
             {
                 for (int i = 0; i < MinimizationTable.GetLength(0); i++)
                 {
-                    ResultMinimizations.Add(new ResultMinimizationTableStruct { ColumnCrossing = new List<string>() });
                     LineCrossingPlusCounter.Add(0);
                 }
 
@@ -538,16 +554,10 @@ namespace Test_Quine_Mc_Clusskey
                     {
                         for (int j = 1; j < MinimizationTable.GetLength(1); j++)//Stolbec
                         {
-                            if (MinimizationTable[i, j] == "+")
+                            if (ResultMinimizations[i].ColumnCrossing[j] == "+")
                             {
-                                ResultMinimizations[i].ColumnCrossing.Add("+");
-
                                 if (lineCrossing[i] == "*")
                                     LineCrossingPlusCounter[i]++;
-                            }
-                            else
-                            {
-                                ResultMinimizations[i].ColumnCrossing.Add("*");
                             }
                         }
                     }
@@ -574,15 +584,15 @@ namespace Test_Quine_Mc_Clusskey
                         LineCrossingSecond[i] = "+";
                 }
 
-                if(CheckLine(LineCrossingSecond))
+                if (CheckLine(LineCrossingSecond))
                 {
+                    coreList.Add(index);
                     break;
                 }
                 else
                 {
                     coreList.Add(index);
                     LineCrossingPlusCounter.Clear();
-                    ResultMinimizations.Clear();
                 }
             }
 
@@ -651,11 +661,10 @@ namespace Test_Quine_Mc_Clusskey
             }
         }
 
-        public void ConvertResult()
+        public string ConvertResult(string lineResult)
         {
             string line = "";
-
-            string[] SplitResult = ResultLine.Split(new char[] { ' ' });
+            string[] SplitResult = lineResult.Split(new char[] { ' ' });
 
             for (int i = 0; i < SplitResult.Length - 2; i++)
             {
@@ -676,7 +685,7 @@ namespace Test_Quine_Mc_Clusskey
                 }
             }
 
-            ResultLine = line;
+            return line;
         }
 
         public struct LowerMintermStruct
@@ -706,6 +715,11 @@ namespace Test_Quine_Mc_Clusskey
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox6_TextChanged(object sender, EventArgs e)
         {
 
         }
