@@ -195,6 +195,19 @@ namespace Test_Quine_Mc_Clusskey
 
             NewMinterms = OptimizeMinerms(NewMinterms);
 
+            AddNotAddedMinterms();
+
+            for(int i = 0; i < EndMinterms.Count - 1; i++)
+            {
+                for(int j = i + 1; j < EndMinterms.Count; j++)
+                {
+                    if(EndMinterms[i] == EndMinterms[j])
+                    {
+                        EndMinterms.RemoveAt(j);
+                    }
+                }
+            }
+
             for (int i = 0; i < IndexNotEndMinterms.Count; i++)
             {
                 for (int j = 0; j < EndMinterms.Count; j++)
@@ -331,6 +344,27 @@ namespace Test_Quine_Mc_Clusskey
                 NewMinterms = Minterms;
 
             return NewMinterms;
+        }
+
+        public void AddNotAddedMinterms()
+        {
+            for(int i = 0; i < Minterms.Count - 1; i++)
+            {
+                if (Minterms[i].LowerMinterm.Count == 0 && Minterms[i + 1].LowerMinterm.Count != 0)
+                {
+                    for (int j = 0; j < Minterms[i + 1].LowerMinterm.Count; j++)
+                    {
+                        EndMinterms.Add(Minterms[i + 1].LowerMinterm[j]);
+                    }
+                }
+                else if (Minterms[i].LowerMinterm.Count != 0 && Minterms[i + 1].LowerMinterm.Count == 0)
+                {
+                    for (int j = 0; j < Minterms[i + 1].LowerMinterm.Count; j++)
+                    {
+                        EndMinterms.Add(Minterms[i + 1].LowerMinterm[j]);
+                    }
+                }
+            }
         }
 
         public List<LowerMintermStruct> OptimizeMinerms(List<LowerMintermStruct> NewMinterms)
@@ -477,10 +511,14 @@ namespace Test_Quine_Mc_Clusskey
 
                 if (PlusCount == 1 && !ResultLine.Contains(TmpLine))
                 {
-                    CoreResultLine += TmpLine + " + ";
-                    CoreCount++;
-                    TmpLine = "";
-                    CoreList.Add(Index);
+                    if (!CoreList.Contains(Index))
+                    {
+                        CoreResultLine += TmpLine + " + ";
+                        CoreCount++;
+                        TmpLine = "";
+
+                        CoreList.Add(Index);
+                    }
                 }
             }
 
@@ -543,7 +581,7 @@ namespace Test_Quine_Mc_Clusskey
                 }
             }
 
-            while (true)
+            for(int x = 0; x < 10; x++)
             {
                 for (int i = 0; i < MinimizationTable.GetLength(0); i++)
                 {
@@ -556,19 +594,18 @@ namespace Test_Quine_Mc_Clusskey
                     {
                         for (int j = 1; j < MinimizationTable.GetLength(1); j++)//Stolbec
                         {
-                            if (ResultMinimizations[i].ColumnCrossing[j] == "+")
+                            if (ResultMinimizations[i].ColumnCrossing[j] == "+" && lineCrossing[j] == "*")
                             {
-                                if (lineCrossing[i] == "*")
-                                    LineCrossingPlusCounter[i]++;
+                                LineCrossingPlusCounter[i]++;
                             }
                         }
                     }
                 }
 
-                max = int.MinValue;
+                max = 0;
                 index = 0;
 
-                for (int i = 1; i < LineCrossingPlusCounter.Count; i++)
+                for (int i = 0; i < LineCrossingPlusCounter.Count; i++)
                 {
                     if (!coreList.Contains(i))
                     {
@@ -586,14 +623,15 @@ namespace Test_Quine_Mc_Clusskey
                         LineCrossingSecond[i] = "+";
                 }
 
+                if(index != 0 && !coreList.Contains(index))
+                    coreList.Add(index);
+
                 if (CheckLine(LineCrossingSecond))
                 {
-                    coreList.Add(index);
                     break;
                 }
                 else
                 {
-                    coreList.Add(index);
                     LineCrossingPlusCounter.Clear();
                 }
             }
