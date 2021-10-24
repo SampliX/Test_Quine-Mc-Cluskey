@@ -45,6 +45,7 @@ namespace Test_Quine_Mc_Clusskey
             this.textBox5 = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.textBox6 = new System.Windows.Forms.TextBox();
+            this.button2 = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
@@ -72,7 +73,7 @@ namespace Test_Quine_Mc_Clusskey
             this.файлToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1071, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1450, 24);
             this.menuStrip1.TabIndex = 6;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -130,11 +131,11 @@ namespace Test_Quine_Mc_Clusskey
             // 
             this.textBox4.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBox4.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.textBox4.Location = new System.Drawing.Point(3, 30);
+            this.textBox4.Location = new System.Drawing.Point(3, 16);
             this.textBox4.Multiline = true;
             this.textBox4.Name = "textBox4";
             this.textBox4.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal;
-            this.textBox4.Size = new System.Drawing.Size(753, 250);
+            this.textBox4.Size = new System.Drawing.Size(1072, 372);
             this.textBox4.TabIndex = 12;
             // 
             // panel2
@@ -142,9 +143,9 @@ namespace Test_Quine_Mc_Clusskey
             this.panel2.AutoScroll = true;
             this.panel2.AutoSize = true;
             this.panel2.Controls.Add(this.textBox4);
-            this.panel2.Location = new System.Drawing.Point(306, 249);
+            this.panel2.Location = new System.Drawing.Point(306, 222);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(759, 283);
+            this.panel2.Size = new System.Drawing.Size(1078, 391);
             this.panel2.TabIndex = 13;
             // 
             // HexRadioButton
@@ -195,12 +196,23 @@ namespace Test_Quine_Mc_Clusskey
             this.textBox6.TabIndex = 18;
             this.textBox6.TextChanged += new System.EventHandler(this.textBox6_TextChanged);
             // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(617, 83);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.TabIndex = 19;
+            this.button2.Text = "Test";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
-            this.ClientSize = new System.Drawing.Size(1071, 544);
+            this.ClientSize = new System.Drawing.Size(1450, 622);
+            this.Controls.Add(this.button2);
             this.Controls.Add(this.textBox6);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.textBox5);
@@ -244,6 +256,7 @@ namespace Test_Quine_Mc_Clusskey
         private System.Windows.Forms.TextBox textBox5;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox textBox6;
+        private System.Windows.Forms.Button button2;
     }
 }
 
