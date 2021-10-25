@@ -83,7 +83,7 @@ namespace Test_Quine_Mc_Clusskey
                 a = 0;
                 if (Convert.ToInt32(funcLine[i].ToString()) == 1)
                 {
-                    line = ConvertToFormat(Convert.ToString(i, 2));
+                    line = ConvertToFormat(Convert.ToString(i, 2), bitDepth);
 
                     for (int k = 0; k < line.Length; k++)
                     {
@@ -259,7 +259,7 @@ namespace Test_Quine_Mc_Clusskey
             return ListAreSame;
         }
 
-        public string ConvertToFormat(string line)
+        public string ConvertToFormat(string line, byte bitDepth)
         {
             int LengthOfLine = bitDepth - line.Length;
 
@@ -382,6 +382,12 @@ namespace Test_Quine_Mc_Clusskey
                 }
             }
 
+            if(LineCrossing.Count == 1)
+            {
+                for (int i = 1; i < MinimizationTable.GetLength(1); i++)
+                    LineCrossing.Add("*");
+            }
+
             CoreList = FindOptimalResult(LineCrossing, CoreList);
             CheckAnswer(CoreList);
 
@@ -500,7 +506,7 @@ namespace Test_Quine_Mc_Clusskey
                 DifferenceCount = 0;
                 if (Convert.ToInt32(funcLine[i].ToString()) == 1)
                 {
-                    line = ConvertToFormat(Convert.ToString(i, 2));
+                    line = ConvertToFormat(Convert.ToString(i, 2), bitDepth);
 
                     for (int j = 0; j < CoreList.Count; j++)
                     {

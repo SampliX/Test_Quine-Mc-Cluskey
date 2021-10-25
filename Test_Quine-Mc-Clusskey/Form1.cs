@@ -25,82 +25,16 @@ namespace Test_Quine_Mc_Clusskey
         string FuncResultLine;
 
         string finalFunc;
-        int LastX;
-        int LastY;
 
         public Form1()
         {
             InitializeComponent();
         }
 
-        public void LoadData()
-        {
-            int period;
-            int countPeriod;
-            bool tmp;
-            int b;
-            int counter;
-
-            if (HexRadioButton.Checked)
-            {
-                finalFunc = ConvertToBin(originalFunc);
-            }
-            else if (BinRadioButton.Checked)
-            {
-                finalFunc = originalFunc;
-            }
-
-            for (byte i = 0; i < bitDepth; i++)
-            {
-                int a = (bitDepth - i);
-
-                LastX = 3 + 25 * i;
-
-                textBoxes.Add(new TextBox { Name = (bitDepth - 1 - i).ToString(), Text = "X" + (bitDepth - 1 - i).ToString(), ReadOnly = true, Size = new Size(20, 20), Location = new Point(LastX, 3), Parent = panel1 });
-
-                counter = 1;
-
-                period = (int)Math.Pow(2, a) / 2;
-
-                for (int k = 0; k < Math.Pow(2, i); k++)
-                {
-                    tmp = false;
-                    countPeriod = 0;
-                    b = 0;
-
-                    for (int j = 0; j < Math.Pow(2, a); j++)
-                    {
-                        if (countPeriod == period)
-                        {
-                            if (tmp)
-                            {
-                                tmp = false;
-                                b = 0;
-                            }
-                            else
-                            {
-                                tmp = true;
-                                b = 1;
-                            }
-
-                            countPeriod = 0;
-                        }
-
-                        LastY = 3 + 25 * counter;
-
-                        textBoxes.Add(new TextBox { Name = "X" + (bitDepth - 1 - i).ToString() + "_" + counter.ToString(), Text = b.ToString(), ReadOnly = true, Size = new Size(20, 20), Location = new Point(LastX, LastY), Parent = panel1 });
-
-                        countPeriod++;
-                        counter++;
-                    }
-                }
-            }
-        }
-
         public string ConvertToBin(string line)
         {
             string TmpLine = "";
-            string HexFunc = line;
+            string HexFunc = line.ToLower();
 
             for (int i = 0; i < HexFunc.Length; i++)
             {
@@ -154,68 +88,100 @@ namespace Test_Quine_Mc_Clusskey
                     case ("f"):
                         TmpLine += "1111";
                         break;
+                    default:
+                        throw new Exception("Входная строка имела неверный формат.");
+                        break;
                 }
             }
 
             return TmpLine;
         }
 
-        public void PrintFunc()
-        {
-            Panel BlackLine = new Panel { Location = new Point(LastX + 25, 3), Size = new Size(5, LastY + 18), BackColor = Color.FromArgb(125, 125, 125), Parent = panel1 };
-
-            LastX += 35;
-
-            textBoxes.Add(new TextBox { Name = "F", Text = "F", ReadOnly = true, Size = new Size(20, 20), Location = new Point(LastX, 3), Parent = panel1 });
-
-            for (int i = 0; i < Math.Pow(2, Convert.ToByte(textBox2.Text)); i++)
-            {
-                textBoxes.Add(new TextBox { Name = "F_" + i.ToString(), Text = finalFunc[i].ToString(), ReadOnly = true, Size = new Size(20, 20), Location = new Point(LastX, 3 + 25 * (i + 1)), Parent = panel1 });
-            }
-        }
-
-        public void ClearPanel()
-        {
-            for (int j = 0; j < 10; j++)
-            {
-                for (int i = 0; i < this.panel1.Controls.Count; i++)
-                {
-                    panel1.Controls.Remove(panel1.Controls[i]);
-                }
-            }
-        }
-
         private void button1_Click(object sender, EventArgs e)
         {
-            SaveExternalData();
+            //try
+            //{
+                originalFunc = textBox1.Text;
+                originalFunc = ConvertFuncToFormat(originalFunc);
 
-            ClearPanel();
+                if (HexRadioButton.Checked)
+                    finalFunc = ConvertToBin(originalFunc);
+                else
+                    finalFunc = originalFunc;
 
-            LoadData();
+                bitDepth = Convert.ToByte(Math.Log(finalFunc.Length, 2));
 
-            textBox4.Clear();
+                if (originalFunc.Length != textBox1.Text.Length)
+                {
+                    textBox1.Text = originalFunc;
+                    MessageBox.Show("Функция была приведена к формату - " + bitDepth.ToString() + " разрядов", "Сообщение", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
 
-            if (finalFunc.Length == Math.Pow(2, bitDepth))
-                PrintFunc();
+                StartQuineMcClusky(bitDepth, finalFunc);
 
-            StartQuineMcClusky(bitDepth, finalFunc);
+                if (Error)
+                    MessageBox.Show("В ответе ошибки", "Внимание!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
-            if (!Error)
-            {
+                GenerateTruthTable();
                 WriteTable();
+
                 textBox5.Text = CoreResultLine;
                 textBox3.Text = FuncResultLine;
+            //}
+            //catch(Exception ex)
+            //{
+            //    MessageBox.Show(ex.Message, "Ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //}
+        }
+
+        public string ConvertFuncToFormat(string func)
+        {
+            int iter;
+
+            if (HexRadioButton.Checked)
+            {
+                iter = ((int)Math.Pow(2, Math.Ceiling(Math.Log(func.Length * 4, 2))) - func.Length * 4) / 4;
             }
             else
             {
-                MessageBox.Show("В ответе ошибки");
+                iter = (int)Math.Pow(2, Math.Ceiling(Math.Log(func.Length, 2))) - func.Length;
             }
+
+            for (int i = 0; i < iter; i++)
+                func = "0" + func;
+
+            return func;
         }
 
-        public void SaveExternalData()
+        public void GenerateTruthTable()
         {
-            originalFunc = textBox1.Text;
-            bitDepth = Convert.ToByte(textBox2.Text);
+            TruthTableListView.Clear();
+
+            string tmp;
+
+            TruthTableListView.Columns.Add("", 0);
+
+            for (int i = bitDepth - 1; i >= 0; i--)
+            {
+                TruthTableListView.Columns.Add("X" + i.ToString(), 30, HorizontalAlignment.Center);
+            }
+
+            TruthTableListView.Columns.Add("F", 30, HorizontalAlignment.Center);
+
+            for (int i = 0; i < Math.Pow(2, bitDepth); i++)
+            {
+                ListViewItem item = new ListViewItem("", 0);
+                tmp = quine.ConvertToFormat(Convert.ToString(i, 2), bitDepth);
+
+                for(int j = 0; j < bitDepth; j++)
+                {
+                    item.SubItems.Add(tmp[j].ToString());
+                }
+
+                item.SubItems.Add(finalFunc[i].ToString());
+
+                TruthTableListView.Items.AddRange(new ListViewItem[] { item });
+            }
         }
 
         public void StartQuineMcClusky(byte bitDepth, string funcLine)
@@ -225,6 +191,7 @@ namespace Test_Quine_Mc_Clusskey
 
         public void WriteTable()
         {
+            textBox4.Clear();
             string TmpLine;
             string RowTable = "";
 
@@ -296,7 +263,7 @@ namespace Test_Quine_Mc_Clusskey
 
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void TestToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string endFunc;
             Stopwatch stopwatch = new Stopwatch();
