@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Test_Quine_Mc_Clusskey
 {
@@ -27,13 +28,9 @@ namespace Test_Quine_Mc_Clusskey
 
             EndMinterms.Clear();
             IndexNotEndMinterms.Clear();
-            funcResultLine = "";
-            coreResultLine = "";
 
             NewMinterms = DataSearch(SortData());
-
             NewMinterms = OptimizeMinerms(NewMinterms);
-
             AddNotAddedMinterms();
 
             for (int i = 0; i < EndMinterms.Count - 1; i++)
@@ -133,7 +130,8 @@ namespace Test_Quine_Mc_Clusskey
                                 DifferenceIndex = x;
                             }
 
-                            if ((Convert.ToString(Minterms[i][j][x]) != Convert.ToString(Minterms[i + 1][k][x])) && (Convert.ToString(Minterms[i][j][x]) == "x" || Convert.ToString(Minterms[i + 1][k][x]) == "x"))
+                            if ((Convert.ToString(Minterms[i][j][x]) != Convert.ToString(Minterms[i + 1][k][x])) && 
+                                (Convert.ToString(Minterms[i][j][x]) == "x" || Convert.ToString(Minterms[i + 1][k][x]) == "x"))
                             {
                                 LineDifferenceCounter = 2;
                                 break;
@@ -261,12 +259,7 @@ namespace Test_Quine_Mc_Clusskey
 
         public string ConvertToFormat(string line, byte bitDepth)
         {
-            int LengthOfLine = bitDepth - line.Length;
-
-            for (int i = 0; i < LengthOfLine; i++)
-                line = "0" + line;
-
-            return line;
+            return string.Join("", Enumerable.Repeat("0", bitDepth - line.Length)) + line;
         }
 
         public void CalcTable()
@@ -331,11 +324,11 @@ namespace Test_Quine_Mc_Clusskey
             int CoreCount = 0;
             int Index = 0;
 
-            for (int j = 1; j < MinimizationTable.GetLength(1); j++)//Stolbec
+            for (int j = 1; j < MinimizationTable.GetLength(1); j++)//Column
             {
                 PlusCount = 0;
                 Index = 0;
-                for (int i = 1; i < MinimizationTable.GetLength(0); i++)//Stroka
+                for (int i = 1; i < MinimizationTable.GetLength(0); i++)//Row
                 {
                     if (MinimizationTable[i, j] == "+")
                     {
